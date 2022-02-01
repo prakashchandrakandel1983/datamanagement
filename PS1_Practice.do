@@ -4,6 +4,8 @@
 
 clear all
 
+//no this wont work! i dont have this file! it must load data from online!!
+//and remember to have 2 files from 2 different sources
 import excel "/Users/prakashchandrakandel/Desktop/DATA MANAGEMENT/Dataset/2020_MRI_Scores_and_Rankings.xlsx", sheet("2020 MRI - Alphabetical")
 
 browse
@@ -15,7 +17,7 @@ drop in 1
 browse
 drop in 566/575
 
-*Renaming of variables
+*Renaming of variables //can read it first row as names, see help import excel
 
 rename A muni_id
 rename B muni_name
