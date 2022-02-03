@@ -1,3 +1,5 @@
+//read carefully ps insytrusctions!! eg need to save in 3 diff forats!
+
 * This dofile is associated with the voting patterns in the 2020 Presidential Election in 2020 across municipalities in New Jersey. I will be using the related data set to find out the relationship between adoption of Marijuana Law across municipalities and voting patterns.
 
 clear all
