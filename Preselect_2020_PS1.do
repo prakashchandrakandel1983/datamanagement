@@ -40,9 +40,11 @@ sum
 //need to read ps carefully; didnt save in 3 different formats; abd should have used 2 different datasets to begin with
 
 . export excel using "/Users/prakashchandrakandel/Desktop/DATA MANAGEMENT/PS1/Excel_PS1.xls" 
+//ok fine but stuff like this:
 file /Users/prakashchandrakandel/Desktop/DATA MANAGEMENT/PS1/Excel_PS1.xls saved
+//is not the command! its stata message! it must be dropped!! here and elsewhere
 
-
+//and stata commands cannot be preceded by a "." like below:
 . export delimited using "/Users/prakashchandrakandel/Desktop/DATA MANAGEMENT/PS1/CSV_PS1.csv", 
 replace file /Users/prakashchandrakandel/Desktop/DATA MANAGEMENT/PS1/CSV_PS1.csv saved
  
