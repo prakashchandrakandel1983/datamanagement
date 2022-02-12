@@ -23,7 +23,7 @@ cd  `worDir'
 
 //https://www.nj.gov/dca/home/2020_MRI_Scores_and_Rankings.xlsx
 import excel "https://docs.google.com/uc?id=1MFklK6ss_5WY5QUcti93Zo50lKWGYmE9&export=download", clear
-
+//can give it option firstr to read first row as var names, less work
 set seed 123456789 //setting randomness to a constant
 d
 sum
@@ -123,13 +123,13 @@ save mri.dta, replace
 
 
 foreach var of varlist mri_score-capita_value {
-destring `var', replace force
+destring `var', replace force //no! dont use force unless really necessary and you know whats happening
 }
 
 d
 sum
 
-save mri.dta, replace
+save mri.dta, replace //id drop this you save below
 
 
 tab county_name                  /*check var values*/
@@ -142,7 +142,7 @@ codebook county_id, tab(100)    /* codebook will show both: values and value lab
                               /* get all values*/
 codebook region_numeric
                              
-save mri.dta, replace
+save mri.dta, replace 
 
 
 generate county=.
@@ -230,7 +230,7 @@ exit
 *------------------------------------------------------------------------------*
 
 *The another data set is about the results of 2020 Presidential Election in New Jersey, which will be used to find out the the relationship between status of cannabis legalization, parameters of MRI, and  the results of presidential election. In other words, this dataset will be used to identify the relationship between adopting Marijuana Law and voting pattern, while at the same time taking other variables into account.
-
+//where did you get it from? give url
 * notes : 
 clear         
 set matsize 800 
@@ -280,6 +280,8 @@ sum
 save pres_elect,replace
 export excel using pres_elect
 export delimited using pres_elect
+
+//you didnt merge! need to merge!
 
 clear
 exit
