@@ -1,7 +1,7 @@
 *______________________________________________________________________
 * Data Management in Stata
 *Prakash Chandra Kandel
-* Date: Feb 11, 2022
+* Date: Feb 114, 2022
 
 * notes : 
 clear         
@@ -23,8 +23,11 @@ cd  `worDir'
 
 //https://www.nj.gov/dca/home/2020_MRI_Scores_and_Rankings.xlsx
 import excel "https://docs.google.com/uc?id=1MFklK6ss_5WY5QUcti93Zo50lKWGYmE9&export=download", clear
+
 //can give it option firstr to read first row as var names, less work
-set seed 123456789 //setting randomness to a constant
+*Ans: Any of the first 6 rows had no data.
+s
+et seed 123456789 //setting randomness to a constant
 d
 sum
 save mri.dta, replace
@@ -86,7 +89,7 @@ label var mri_score "Municipal Revitalization Index Score"
 label var mri_distress_score "MRI Distress Score of NJ Municipalities"
 label var mri_rank "MRI Ranking of NJ Municipalities"
 label var pop_change_rank "Population Change of NJ Municipalities (2009-2019)"
-label var pop_change_inde "Population Change Index of NJ Municipalities (2009-2019)"
+label var pop_change_index "Population Change Index of NJ Municipalities (2009-2019)"
 label var pop_change_value "Population Change Value of NJ Municipalities (2009-2019)"
 label var nshv_rate_rank "Non-seasonal Housing Vacancy Rate Ranking (2019)"
 label var nshv_rate_index "Non-seasonal Housing Vacancy Rate Index (2019)"
@@ -119,17 +122,29 @@ label var urb_aid "2020 Urban Aid"
 
 drop pop_change_index nshv_rate_rank nshv_rate_index snap_rank snap_index tanf_rank tanf_index pov_rank pov_index mhi_rank mhi_index unemp_rank unemp_index edu_rank edu_index proptax_rank proptax_index capita_rank capita_index urb_aid 
 
+
 save mri.dta, replace
 
 
-foreach var of varlist mri_score-capita_value {
-destring `var', replace force //no! dont use force unless really necessary and you know whats happening
-}
+destring mri_score, gen (mriscore_num)
+drop in 566/1141
+drop pop_change_rank
+
+destring mri_distress_score, gen(mrid_num)
+destring mri_rank, gen(mrir_num)
+destring pop_change_value, gen (popcval_num)
+destring nshv_rate_value, gen(nshvrval_num)
+destring snap_value, gen(snapv_num)
+destring tanf_value, gen(tanfv_num)
+destring pov_value, gen(popv_num)
+destring mhi_value, gen(mhiv_num)
+destring unemp_value, gen(unempv_num)
+destring edu_value, gen (eduv_num)
+destring proptax_value, gen(proptv_num)
+destring capita_value, gen(capv_num)
 
 d
 sum
-
-save mri.dta, replace //id drop this you save below
 
 
 tab county_name                  /*check var values*/
@@ -148,8 +163,7 @@ save mri.dta, replace
 generate county=.
 replace county=1 if county_id==1
 replace county=0 if county_id>1 & county_id<22						  
-							  
-use mri, clear							  
+							  						  
 
 recode county_id (1=1) (2/21=), gen(county_1)
 
@@ -159,16 +173,16 @@ ta region region_numeric, mi
 /* Egen */
 
 use mri, clear
-egen avg_cap=mean(capita_value)
-sum capita_value
-gen dev_capita=capita_value-avg_cap
-l capita_value avg_cap dev_capita in 1/10, nola
+egen avg_cap=mean(capv_num)
+sum capv_num
+gen dev_capita=capv_num-avg_cap
+l capv_num avg_cap dev_capita in 1/10, nola
 
 bys county_id: egen avgm_capita=mean(capita_value)
-l capita_value county* if  county_id==3 | county_id==1
+l  capv_num county* if  county_id==3 | county_id==1
 
 sort county_id
-l capita_value county_id, nola sepby(county_id)
+l  capv_num county_id, nola sepby(county_id)
 
 order mri_score               
 d
@@ -178,15 +192,14 @@ aorder                        /*vars in alphabetic order*/
 d
 edit
 
+use mri, clear
 
 /*_n, _N */  
-
-use mri, clear
-drop in 566/1141
+gen id= _n
+label var id "New Municipal ID"
+order id
 save mri, replace
 
-gen id= _n
-drop total
 gen total= _N
 l
 
@@ -199,24 +212,22 @@ l id total previous  count_county_group county_id, sepby(county_id)
 /*collapse*/
 
 use mri, clear
-gen id= _n
+
 
 bys county_id: gen count_county_group=_n
 bys county_id: egen count_id=count(id)
 
 l id county_id count*, sepby(county_id)
 
-collapse capita_value mri_score edu_value, by(county_id) /*mean is default*/
+collapse capv_num mriscore_num eduv_num, by(county_id) /*mean is default*/
 l
 
 use mri, clear
 bys county_id: egen counCou=count(county_id)
 l 
 
-gen id= _n
 collapse (count) id, by(county_id)
 l
-
 
 *saving in different formats
 export excel using mri
@@ -230,7 +241,8 @@ exit
 *------------------------------------------------------------------------------*
 
 *The another data set is about the results of 2020 Presidential Election in New Jersey, which will be used to find out the the relationship between status of cannabis legalization, parameters of MRI, and  the results of presidential election. In other words, this dataset will be used to identify the relationship between adopting Marijuana Law and voting pattern, while at the same time taking other variables into account.
-//where did you get it from? give url
+
+//https://datawrapper.dwcdn.net/o9YRC/9/
 * notes : 
 clear         
 set matsize 800 
@@ -246,7 +258,6 @@ cd  `worDir'
 clear
 
 //https://datawrapper.dwcdn.net/o9YRC/9/
-
 import delimited using "https://docs.google.com/uc?id=1sYVRk8YiSajJ-5sexhcXjLJkyCq59aow&export=download", clear
 
 
@@ -273,7 +284,6 @@ l
 order id
 l
 encode county, gen (county_id)
-label
 d
 sum
 
@@ -281,7 +291,8 @@ save pres_elect,replace
 export excel using pres_elect
 export delimited using pres_elect
 
-//you didnt merge! need to merge!
 
+merge 1:1 id using mri 
+ 
 clear
 exit
