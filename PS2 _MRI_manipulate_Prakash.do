@@ -22,15 +22,16 @@ cd  `worDir'
 
 
 //https://www.nj.gov/dca/home/2020_MRI_Scores_and_Rankings.xlsx
-import excel "https://docs.google.com/uc?id=1MFklK6ss_5WY5QUcti93Zo50lKWGYmE9&export=download", clear
+import excel "https://docs.google.com/uc?id=1MFklK6ss_5WY5QUcti93Zo50lKWGYmE9&export=download", clear 
 
 //can give it option firstr to read first row as var names, less work
 *Ans: Any of the first 6 rows had no data.
-s
-et seed 123456789 //setting randomness to a constant
+// well then read it starting with 6th row:
+// cellrange(A6)
+set seed 123456789 //setting randomness to a constant
 d
 sum
-save mri.dta, replace
+save mri.dta, replace //right but then you save again as the same file! either dont save or save each time as sth else!!!
 
 /**************/
 /* Variables  */
@@ -80,6 +81,7 @@ rename AK capita_value
 rename AL urb_aid
 rename nshv_rate nshv_rate_rank
 
+//are you going to use in your research all of these? if not, you're wasting time!
 label var muni_id "Municipality Name"
 label var muni_id "Municipality ID"
 label var muni_name "Municipality Name"
@@ -120,10 +122,11 @@ label var capita_index "Equalized Valuation Per Capita (2019) Index"
 label var capita_value "Equalized Valuation Per Capita (2019) Value"
 label var urb_aid "2020 Urban Aid"
 
+//oh yeah so you're droping ones you've labelled, just drop them earlier
 drop pop_change_index nshv_rate_rank nshv_rate_index snap_rank snap_index tanf_rank tanf_index pov_rank pov_index mhi_rank mhi_index unemp_rank unemp_index edu_rank edu_index proptax_rank proptax_index capita_rank capita_index urb_aid 
 
 
-save mri.dta, replace
+save mri.dta, replace //no! doesnt make sense, you save mri again below
 
 
 destring mri_score, gen (mriscore_num)
@@ -169,6 +172,7 @@ recode county_id (1=1) (2/21=), gen(county_1)
 
 ta region region_numeric, mi
 
+//doesnt make sense again--now you dont save it, and below you load from hard drive, so you lose your commands from above!!
 
 /* Egen */
 
@@ -292,7 +296,7 @@ export excel using pres_elect
 export delimited using pres_elect
 
 
-merge 1:1 id using mri 
+merge 1:1 id using mri //no!!!!!!! how you merge new jersey with the world????
  
 clear
 exit
