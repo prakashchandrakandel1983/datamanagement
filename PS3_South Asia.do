@@ -29,12 +29,13 @@ unemployment rate have been considered for analysis.
 //https://databank.worldbank.org/reports.aspx?source=world-development-indicators#advancedDownloadOptions
 
 import excel "https://docs.google.com/uc?id=1-CC6tUpRdGrvrEY2o0Kh6Ls0oWcIHzHO&export=download", firstrow clear 
+drop in 73/77
+//TODO !!!! adjust if data changes
 
 d
 summarize
 
 
-drop in 73/77
 drop SeriesCode
 drop if CountryCode ==""
 save wdi, replace
@@ -117,6 +118,7 @@ rename TimePeriod Year
 
 *drop*
 drop Indicator SeriesID SeriesDescription GeoAreaCode Time_Detail Source FootNote Nature Units SeriesCode ReportingType
+//always try to drop on a condition; NOT in range
 drop in 1/42
 drop in 20/562
 drop in 39/219
@@ -134,7 +136,12 @@ keep if Year>2014
 save under_nut, replace
 
 *Merge*
-merge m:1 CountryName Year using wdi, nogen
+
+sort CountryName Year
+edit
+count if CountryName==CountryName[_n-1] & Year==Year[_n-1]
+
+merge 1:1 CountryName Year using wdi //, nogen
 
 /*
 
@@ -179,6 +186,7 @@ d
 sum
 
 *drop*
+//use keep
 drop deathscauseallcausesriskoutdoora deathscauseallcausesriskhighsyst deathscauseallcausesriskdiethigh deathscauseallcausesriskdietlowi deathscauseallcausesriskalcoholu v9 deathscauseallcausesrisksecondha deathscauseallcausesriskunsafese v15 v17 deathscauseallcausesrisklowphysi deathscauseallcausesriskhighfast deathscauseallcausesriskhighbody deathscauseallcausesriskdruguses deathscauseallcausesrisklowbonem deathscauseallcausesriskvitamina deathscauseallcausesriskdisconti deathscauseallcausesrisknonexclu deathscauseallcausesriskirondefi
 
 *rename and label
@@ -197,18 +205,25 @@ rename deathscauseallcausesrisknoaccess nohwash_de
 rename deathscauseallcausesriskchildstu chstunt_de
 
 *keep
+//alt way keep if inlist(CountryCode,"PAK","BGD")
+
 keep if CountryCode=="AFG" | CountryCode=="BGD" | CountryCode=="BTN" | CountryCode=="IND" | CountryCode=="MDV" | CountryCode=="NPL" | CountryCode=="PAK" | CountryCode=="LAK"
 
 keep if Year>2014
 
-save death, replace
+//dont save as the same thing 2 in different palces
+//save death, replace
 
 *Merge
+//MISTAKE!!!!
 merge 1:1 CountryName CountryCode Year using under_nut, nogen
+
+//and again down below, do 1:1, not 1:m!!
 
 /*
 
  *Merge
+ 
 . merge 1:1 CountryName CountryCode Year using under_nut, nogen
 (variable CountryName was str48, now str92 to accommodate using data's values)
 
