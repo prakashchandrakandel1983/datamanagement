@@ -1,3 +1,12 @@
+/*
+seems like death data are not merged in the final dataset; why not?
+
+and whats your rationale for 1:m???
+why 1 obs from master would match many from using--all your data are country-year, so why say usa 2000 from master would match many usa 2000 in using
+doesnt make sense; you need data at different level!!!
+say province or city or something and then multiple provinces match one country for instance
+*/
+
 *Prakash Chandr Kandel
 *DATA MANAGEMENT
 *DATA on South Asia
