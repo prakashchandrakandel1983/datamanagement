@@ -1,3 +1,10 @@
+/*
+mistake! same values for different countries for same years
+
+im;portant to interpret!!! use graphs in a meaningful way
+
+most of these graphs dont make sense
+*/
 
 *Note: PS4 will follow PS3
                              *****************
