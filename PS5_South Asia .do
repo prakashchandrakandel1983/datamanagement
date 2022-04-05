@@ -846,9 +846,6 @@ summarize `myvars'
 local myvars "ilifelad isocsupp igenerosity ilifexpbirth iposeffect inegaffect"
 describe `myvars'
 
-
-//performing addition//
-
 **REGRESSIONS**
 codebook country
 ta country, gen(C)
