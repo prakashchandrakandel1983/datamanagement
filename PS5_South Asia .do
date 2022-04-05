@@ -881,9 +881,6 @@ display "`country'"
 
 
 
-//adding a prefic to existing variables using foreach loop
-
-
 foreach yvar in iCPI_Value log_poptotal   ipov_ratio {
 reg `yvar' ilifelad  //regression
 }
