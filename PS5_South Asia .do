@@ -1,5 +1,5 @@
 
-*Note: PS5 follows PS3 nad PS4
+*Note: PS5 follows PS3 and PS4.
                              *****************
                                   *PS3
                              ******************
