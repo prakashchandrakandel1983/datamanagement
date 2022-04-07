@@ -1007,6 +1007,19 @@ twoway (lfitci ilifelad isocsupp ) (scatter ilifelad isocsupp), note(R-squared=`
 d
 
 sum
+
+//generating means and then dialogues related to the means of the variable
+levelsof country, local(country)
+foreach x of local country {
+     sum ilifelad if country==`x'
+         if `r(mean)'>4.7 {
+         di "Oh! The mean is above 4.7."
+         }
+         else {
+di "Oh! This is the variable whose mean is at or below 4.7."
+         }
+}
+
 //summarizing numeric variables and displaying error if the variable is not numeric
 foreach var of varlist* {
            capture confirm numeric variable `var'
@@ -1047,20 +1060,6 @@ foreach var of varlist * {
 		  }
 	}	  
  }
-
-  
-//generating means and then dialogues related to the means of the variable
-levelsof country, local(country)
-foreach x of local country {
-     sum ilifelad if country==`x'
-         if `r(mean)'>4.7 {
-         di "Oh! The mean is above 4.7."
-         }
-         else {
-di "Oh! This is the variable whose mean is at or below 4.7."
-         }
-}
-
 
 
 *******************/
