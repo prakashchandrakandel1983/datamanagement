@@ -1,4 +1,14 @@
 
+/*
+
+you say"
+My main objective to collect data is to identify whether poverty and inequality have ramifications in a person's upbringing, stability in the society, freedom, and sense of happiness to name a few."
+--thats good; but then towards the end when you do descriptive stats, do loop back and answer these questions--what do you find? put as comments; you put  a lot of comments what a command does, eg:
+
+graph twoway connected ipov_ratio iLit_rate, sort // twoway graph between poverty ratio and Literacy Rate
+but do have comments about what you find!!!
+*/
+
 *Note: PS6 follows PS3, PS4, and PS5
                              *****************
                                   *PS3
