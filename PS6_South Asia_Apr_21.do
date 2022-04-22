@@ -1,3 +1,5 @@
+//overall fine; clear you've put a lot of work into this; for future research (not necessarily for this class) need more data, ideally at least 100 obs,
+// results are usually not very meaningful with datasets around 30obs
 
 *Note: PS6 follows PS3, PS4, and PS5
                              *****************
